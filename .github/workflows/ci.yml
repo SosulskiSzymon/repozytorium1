@@ -1,0 +1,38 @@
+name: Python application
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Create virtualenv and install dependencies
+        shell: pwsh
+        run: ./scripts/create_venv.ps1
+
+      - name: Format check
+        shell: pwsh
+        run: ./scripts/format_check.ps1
+
+      - name: Lint
+        shell: pwsh
+        run: ./scripts/lint.ps1
+
+      - name: Test with pytest
+        shell: pwsh
+        run: ./scripts/test.ps1
